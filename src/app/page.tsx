@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowRight, Bookmark, Building2, Compass, FileText, Globe2, Image as ImageIcon, LayoutGrid, MapPin, ShieldCheck, Tag, User } from 'lucide-react'
+import { ArrowRight, Bookmark, Building2, Check, Compass, FileDown, FileText, Globe2, Image as ImageIcon, LayoutGrid, MapPin, ShieldCheck, Tag, User } from 'lucide-react'
 import { ContentImage } from '@/components/shared/content-image'
 import { NavbarShell } from '@/components/shared/navbar-shell'
 import { Footer } from '@/components/shared/footer'
@@ -42,7 +42,16 @@ const taskIcons: Record<TaskKey, any> = {
 }
 
 function resolveTaskKey(value: unknown, fallback: TaskKey): TaskKey {
-  if (value === 'listing' || value === 'classified' || value === 'article' || value === 'image' || value === 'profile' || value === 'sbm') return value
+  if (
+    value === 'listing' ||
+    value === 'classified' ||
+    value === 'article' ||
+    value === 'image' ||
+    value === 'profile' ||
+    value === 'sbm' ||
+    value === 'pdf'
+  )
+    return value
   return fallback
 }
 
@@ -101,14 +110,17 @@ function getDirectoryTone(brandPack: string) {
 
 function getEditorialTone() {
   return {
-    shell: 'bg-[#fbf6ee] text-[#241711]',
-    panel: 'border border-[#dcc8b7] bg-[#fffdfa] shadow-[0_24px_60px_rgba(77,47,27,0.08)]',
-    soft: 'border border-[#e6d6c8] bg-[#fff4e8]',
-    muted: 'text-[#6e5547]',
-    title: 'text-[#241711]',
-    badge: 'bg-[#241711] text-[#fff1e2]',
-    action: 'bg-[#241711] text-[#fff1e2] hover:bg-[#3a241b]',
-    actionAlt: 'border border-[#dcc8b7] bg-transparent text-[#241711] hover:bg-[#f5e7d7]',
+    shell: 'bg-[var(--ip-cream)] text-[var(--ip-ink)]',
+    heroBand:
+      'relative overflow-hidden border-b border-[color:rgba(199,93,44,0.15)] bg-[linear-gradient(165deg,#2a1810_0%,#3d2418_42%,#c75d2c_100%)] text-[#fff9f3]',
+    panel: 'border border-[color:rgba(199,93,44,0.2)] bg-white/90 shadow-[0_28px_70px_rgba(42,24,16,0.08)] backdrop-blur-[2px]',
+    soft: 'border border-[color:rgba(199,93,44,0.14)] bg-white/70',
+    muted: 'text-[color:oklch(0.42_0.04_42)]',
+    title: 'text-[var(--ip-ink)]',
+    badge: 'bg-[var(--ip-gold)] text-[#2a1810]',
+    action: 'bg-[var(--ip-orange)] text-white shadow-[0_12px_30px_rgba(199,93,44,0.35)] hover:bg-[#c75d2c]',
+    actionAlt: 'border border-white/25 bg-white/10 text-white hover:bg-white/16',
+    actionOnLight: 'border border-[color:rgba(199,93,44,0.35)] bg-transparent text-[var(--ip-ink)] hover:bg-[rgba(248,178,89,0.15)]',
   }
 }
 
@@ -268,61 +280,130 @@ function DirectoryHome({ primaryTask, enabledTasks, listingPosts, classifiedPost
   )
 }
 
-function EditorialHome({ primaryTask, articlePosts, supportTasks }: { primaryTask?: EnabledTask; articlePosts: SitePost[]; supportTasks: EnabledTask[] }) {
+function EditorialHome({
+  primaryTask,
+  secondaryTask,
+  articlePosts,
+  pdfPosts,
+  tertiaryTasks,
+}: {
+  primaryTask?: EnabledTask
+  secondaryTask?: EnabledTask
+  articlePosts: SitePost[]
+  pdfPosts: SitePost[]
+  tertiaryTasks: EnabledTask[]
+}) {
   const tone = getEditorialTone()
   const lead = articlePosts[0]
   const side = articlePosts.slice(1, 5)
+  const pdfFeatured = pdfPosts.slice(0, 4)
 
   return (
     <main className={tone.shell}>
+      <section className={tone.heroBand}>
+        <div
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-[var(--ip-cream)] [clip-path:polygon(0_42%,100%_0,100%_100%,0_100%)]"
+          aria-hidden
+        />
+        <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+          <div className="grid gap-12 lg:grid-cols-[1.12fr_0.88fr] lg:items-end">
+            <div>
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.26em] text-[#fff4e8]">
+                <FileText className="h-3.5 w-3.5 text-[var(--ip-gold)]" />
+                Info Platforms desk
+              </span>
+              <h1 className="mt-7 max-w-3xl font-[family-name:var(--font-display)] text-4xl font-semibold leading-[1.08] tracking-[-0.05em] sm:text-5xl lg:text-[3.15rem]">
+                Editorial briefings and a document lane readers can trust.
+              </h1>
+              <p className="mt-6 max-w-2xl text-base leading-8 text-[#f3e9dc]/90">{SITE_CONFIG.description}</p>
+              <div className="mt-9 flex flex-wrap gap-3">
+                <Link
+                  href={primaryTask?.route || '/articles'}
+                  className={`inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold ${tone.badge} text-[#2a1810]`}
+                >
+                  Read articles
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                {secondaryTask ? (
+                  <Link href={secondaryTask.route} className={`inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold ${tone.actionAlt}`}>
+                    <FileDown className="h-4 w-4" />
+                    PDF library
+                  </Link>
+                ) : null}
+              </div>
+            </div>
+            <div className={`relative rounded-[2rem] p-7 ${tone.panel} border-white/20`}>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[var(--ip-rust)]">This week</p>
+              <p className="mt-3 text-lg font-semibold text-[var(--ip-ink)]">Structured like a wire service desk: headline clarity first, evidence on file second.</p>
+              <ul className="mt-5 space-y-3 text-sm leading-7 text-[color:oklch(0.42_0.04_42)]">
+                <li className="flex gap-2">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--ip-orange)]" />
+                  Articles use editorial hierarchy tuned for scanning and deep reading.
+                </li>
+                <li className="flex gap-2">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--ip-orange)]" />
+                  PDFs carry stakeholder-ready packs alongside the same discovery tools.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-18">
         <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
           <div>
-            <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] ${tone.badge}`}>
+            <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] ${tone.badge} text-[#2a1810]`}>
               <FileText className="h-3.5 w-3.5" />
-              Reading-first publication
+              From the homepage
             </span>
-            <h1 className={`mt-6 max-w-4xl text-5xl font-semibold tracking-[-0.06em] sm:text-6xl ${tone.title}`}>
-              Essays, analysis, and slower reading designed like a publication, not a dashboard.
-            </h1>
-            <p className={`mt-6 max-w-2xl text-base leading-8 ${tone.muted}`}>{SITE_CONFIG.description}</p>
+            <h2 className={`mt-5 max-w-4xl text-3xl font-semibold tracking-[-0.04em] sm:text-4xl ${tone.title}`}>
+              Reporting you can open in a meeting—and PDFs you can forward as-is.
+            </h2>
+            <p className={`mt-5 max-w-2xl text-base leading-8 ${tone.muted}`}>
+              The public surface keeps attention on articles and files. Other content types stay available across the platform for teams that need them.
+            </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link href={primaryTask?.route || '/articles'} className={`inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold ${tone.action}`}>
-                Start reading
+                Open articles
                 <ArrowRight className="h-4 w-4" />
               </Link>
-              <Link href="/about" className={`inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold ${tone.actionAlt}`}>
-                About the publication
+              <Link href="/search" className={`inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold ${tone.actionOnLight}`}>
+                Search the archive
               </Link>
             </div>
           </div>
 
           <aside className={`rounded-[2rem] p-6 ${tone.panel}`}>
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] opacity-70">Inside this issue</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--ip-rust)]">Also in this feed</p>
             <div className="mt-5 space-y-5">
-              {side.map((post) => (
-                <Link key={post.id} href={`/articles/${post.slug}`} className="block border-b border-black/10 pb-5 last:border-b-0 last:pb-0">
-                  <p className="text-sm font-semibold uppercase tracking-[0.18em] opacity-60">Feature</p>
-                  <h3 className="mt-2 text-xl font-semibold">{post.title}</h3>
-                  <p className={`mt-2 text-sm leading-7 ${tone.muted}`}>{post.summary || 'Long-form perspective with a calmer reading rhythm.'}</p>
-                </Link>
-              ))}
+              {side.length ? (
+                side.map((post) => (
+                  <Link key={post.id} href={`/articles/${post.slug}`} className="block border-b border-black/10 pb-5 last:border-b-0 last:pb-0">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--ip-rust)]">Article</p>
+                    <h3 className="mt-2 text-lg font-semibold text-[var(--ip-ink)]">{post.title}</h3>
+                    <p className={`mt-2 text-sm leading-7 ${tone.muted}`}>{post.summary || 'Analysis and notes from the Info Platforms desk.'}</p>
+                  </Link>
+                ))
+              ) : (
+                <p className={`text-sm leading-7 ${tone.muted}`}>New articles will appear here as they are published to this site.</p>
+              )}
             </div>
           </aside>
         </div>
 
         {lead ? (
-          <div className={`mt-12 overflow-hidden rounded-[2.5rem] ${tone.panel}`}>
+          <div className={`mt-14 overflow-hidden rounded-[2.5rem] ${tone.panel}`}>
             <div className="grid lg:grid-cols-[1.05fr_0.95fr]">
-              <div className="relative min-h-[360px] overflow-hidden">
+              <div className="relative min-h-[320px] overflow-hidden lg:min-h-[380px]">
                 <ContentImage src={getPostImage(lead)} alt={lead.title} fill className="object-cover" />
               </div>
               <div className="p-8 lg:p-10">
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] opacity-70">Lead story</p>
-                <h2 className="mt-4 text-4xl font-semibold tracking-[-0.04em]">{lead.title}</h2>
-                <p className={`mt-4 text-sm leading-8 ${tone.muted}`}>{lead.summary || 'A more deliberate lead story surface with room for a proper narrative setup.'}</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--ip-rust)]">Lead story</p>
+                <h2 className="mt-4 text-3xl font-semibold tracking-[-0.04em] text-[var(--ip-ink)] lg:text-4xl">{lead.title}</h2>
+                <p className={`mt-4 text-sm leading-8 ${tone.muted}`}>{lead.summary || 'A full narrative with the pacing and depth readers expect from Info Platforms.'}</p>
                 <Link href={`/articles/${lead.slug}`} className={`mt-8 inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold ${tone.action}`}>
-                  Read article
+                  Read full article
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
@@ -330,14 +411,92 @@ function EditorialHome({ primaryTask, articlePosts, supportTasks }: { primaryTas
           </div>
         ) : null}
 
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {supportTasks.slice(0, 3).map((task) => (
-            <Link key={task.key} href={task.route} className={`rounded-[1.8rem] p-6 ${tone.soft}`}>
-              <h3 className="text-xl font-semibold">{task.label}</h3>
-              <p className={`mt-3 text-sm leading-7 ${tone.muted}`}>{task.description}</p>
-            </Link>
+        <div className="mt-16 border-y border-[color:rgba(199,93,44,0.12)] bg-white/50 py-12">
+          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[var(--ip-rust)]">PDF library</p>
+              <h2 className="mt-2 text-2xl font-semibold tracking-[-0.03em] text-[var(--ip-ink)]">Downloadable briefings &amp; reference packs</h2>
+              <p className={`mt-3 max-w-2xl text-sm leading-7 ${tone.muted}`}>
+                When the story needs an appendix—methodology, data tables, or a print-ready one-pager—the PDF lane keeps it next to the article program.
+              </p>
+            </div>
+            {secondaryTask ? (
+              <Link href={secondaryTask.route} className={`inline-flex shrink-0 items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold ${tone.action}`}>
+                Browse all PDFs
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            ) : null}
+          </div>
+          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {pdfFeatured.length ? (
+              pdfFeatured.map((post) => (
+                <Link
+                  key={post.id}
+                  href={getTaskHref('pdf', post.slug)}
+                  className={`group flex flex-col rounded-2xl p-5 transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-lg ${tone.soft}`}
+                >
+                  <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--ip-rust)]">
+                    <FileDown className="h-4 w-4" />
+                    PDF
+                  </div>
+                  <h3 className="mt-3 text-lg font-semibold text-[var(--ip-ink)] group-hover:text-[var(--ip-orange)]">{post.title}</h3>
+                  <p className={`mt-2 line-clamp-3 text-sm leading-6 ${tone.muted}`}>{post.summary || 'Document resource from Info Platforms.'}</p>
+                </Link>
+              ))
+            ) : (
+              <div className={`col-span-full rounded-2xl border border-dashed border-[color:rgba(199,93,44,0.25)] bg-white/60 p-8 text-center text-sm ${tone.muted}`}>
+                PDF resources will display here when published to this site.
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="mt-16 grid gap-6 lg:grid-cols-2">
+          {[
+            ['Clean article typography', 'Comfortable measure, strong subheads, and pull-quotes that stay out of the way of the argument.'],
+            ['PDF metadata you can scan', 'Titles, summaries, and categories surface in search alongside articles.'],
+            ['Shared discovery', 'One search path across narrative and files—no duplicate silos.'],
+            ['Account-ready workflows', 'Sign in to follow the same publishing tools your team already uses.'],
+          ].map(([title, body]) => (
+            <div key={title} className={`flex gap-4 rounded-2xl p-6 ${tone.soft}`}>
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[rgba(248,178,89,0.35)] text-[var(--ip-rust)]">
+                <Check className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-[var(--ip-ink)]">{title}</h3>
+                <p className={`mt-2 text-sm leading-7 ${tone.muted}`}>{body}</p>
+              </div>
+            </div>
           ))}
         </div>
+
+        <div className="mt-14 rounded-[2rem] bg-[linear-gradient(135deg,#c75d2c_0%,#2a1810_55%,#3d2418_100%)] px-6 py-10 text-center text-[#fff4e8] sm:px-10">
+          <p className="font-[family-name:var(--font-display)] text-2xl font-semibold tracking-[-0.03em] sm:text-3xl">Built for teams that publish analysis and ship PDFs in the same week.</p>
+          <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-[#f3e9dc]/85">
+            Info Platforms is a distinct editorial system: warm surfaces, rust accents, and a document lane that feels intentional—not like a generic template recolor.
+          </p>
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <Link href="/contact" className={`inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold ${tone.badge} text-[#2a1810]`}>
+              Talk to the desk
+            </Link>
+            <Link href="/about" className={`inline-flex items-center gap-2 rounded-full border border-white/25 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10`}>
+              About Info Platforms
+            </Link>
+          </div>
+        </div>
+
+        {tertiaryTasks.length ? (
+          <div className="mt-12 text-center">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[var(--ip-rust)]">More formats on this site</p>
+            <div className="mt-4 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm">
+              {tertiaryTasks.map((task) => (
+                <Link key={task.key} href={task.route} className={`font-medium text-[var(--ip-ink)] underline decoration-[var(--ip-orange)] decoration-1 underline-offset-4 hover:text-[var(--ip-orange)]`}>
+                  {task.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        ) : null}
       </section>
     </main>
   )
@@ -490,13 +649,15 @@ export default async function HomePage() {
   ).filter(({ posts }) => posts.length)
 
   const primaryTask = enabledTasks.find((task) => task.key === recipe.primaryTask) || enabledTasks[0]
-  const supportTasks = enabledTasks.filter((task) => task.key !== primaryTask?.key)
   const listingPosts = taskFeed.find(({ task }) => task.key === 'listing')?.posts || []
   const classifiedPosts = taskFeed.find(({ task }) => task.key === 'classified')?.posts || []
   const articlePosts = taskFeed.find(({ task }) => task.key === 'article')?.posts || []
   const imagePosts = taskFeed.find(({ task }) => task.key === 'image')?.posts || []
   const profilePosts = taskFeed.find(({ task }) => task.key === 'profile')?.posts || []
   const bookmarkPosts = taskFeed.find(({ task }) => task.key === 'sbm')?.posts || []
+  const pdfPosts = taskFeed.find(({ task }) => task.key === 'pdf')?.posts || []
+  const secondaryTask = enabledTasks.find((task) => task.key === 'pdf')
+  const tertiaryTasks = enabledTasks.filter((task) => task.key !== 'article' && task.key !== 'pdf')
 
   const schemaData = [
     {
@@ -535,7 +696,13 @@ export default async function HomePage() {
         />
       ) : null}
       {productKind === 'editorial' ? (
-        <EditorialHome primaryTask={primaryTask} articlePosts={articlePosts} supportTasks={supportTasks} />
+        <EditorialHome
+          primaryTask={primaryTask}
+          secondaryTask={secondaryTask}
+          articlePosts={articlePosts}
+          pdfPosts={pdfPosts}
+          tertiaryTasks={tertiaryTasks}
+        />
       ) : null}
       {productKind === 'visual' ? (
         <VisualHome primaryTask={primaryTask} imagePosts={imagePosts} profilePosts={profilePosts} articlePosts={articlePosts} />

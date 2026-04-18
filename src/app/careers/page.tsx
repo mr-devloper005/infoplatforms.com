@@ -6,31 +6,33 @@ import { Badge } from "@/components/ui/badge";
 import { SITE_CONFIG } from "@/lib/site-config";
 
 const roles = [
-  { title: "Product Designer", location: "Remote", type: "Full-time", level: "Mid" },
-  { title: "Frontend Engineer", location: "New York, NY", type: "Full-time", level: "Senior" },
-  { title: "Community Lead", location: "Remote", type: "Part-time", level: "Mid" },
+  { title: "Editorial researcher", location: "Remote", type: "Contract", level: "Mid" },
+  { title: "Document operations", location: "Remote", type: "Part-time", level: "Mid" },
 ];
 
 const benefits = [
-  "Flexible schedules and remote-first culture",
-  "Health, dental, and vision coverage",
-  "Annual learning stipend",
-  "Quarterly offsites and team retreats",
+  "Async-first collaboration",
+  "Clear writing and documentation culture",
+  "Learning budget for courses and books",
+  "Quarterly editorial planning sessions",
 ];
 
 export default function CareersPage() {
   return (
     <PageShell
       title="Careers"
-      description={`Help us build the future of community-driven publishing at ${SITE_CONFIG.name}.`}
+      description={`${SITE_CONFIG.name} hires selectively for editorial research, document operations, and publishing support.`}
       actions={
         <Button asChild>
-          <Link href="/contact">Apply Now</Link>
+          <Link href="/contact">Introduce yourself</Link>
         </Button>
       }
     >
       <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
         <div className="space-y-4">
+          <p className="text-sm text-muted-foreground">
+            We keep the team small. If you care about long-form clarity and document-quality PDFs, send a note—we respond when there is a real match.
+          </p>
           {roles.map((role) => (
             <Card key={role.title} className="border-border bg-card">
               <CardContent className="p-6">
@@ -41,7 +43,7 @@ export default function CareersPage() {
                 <h2 className="mt-3 text-lg font-semibold text-foreground">{role.title}</h2>
                 <p className="mt-1 text-sm text-muted-foreground">{role.location}</p>
                 <Button variant="outline" className="mt-4" asChild>
-                  <Link href="/contact">View Role</Link>
+                  <Link href="/contact">Discuss this role</Link>
                 </Button>
               </CardContent>
             </Card>
@@ -49,17 +51,15 @@ export default function CareersPage() {
         </div>
         <Card className="border-border bg-card">
           <CardContent className="p-6">
-            <h3 className="text-lg font-semibold text-foreground">Why {SITE_CONFIG.name}</h3>
-            <p className="mt-2 text-sm text-muted-foreground">
-              We are building a product that helps people discover and share the best knowledge on the web.
-            </p>
-            <div className="mt-4 space-y-2 text-sm text-muted-foreground">
-              {benefits.map((benefit) => (
-                <div key={benefit} className="rounded-md border border-border bg-secondary/40 px-3 py-2">
-                  {benefit}
-                </div>
+            <h3 className="text-lg font-semibold text-foreground">How we work</h3>
+            <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
+              {benefits.map((item) => (
+                <li key={item} className="flex gap-2">
+                  <span className="text-primary">•</span>
+                  {item}
+                </li>
               ))}
-            </div>
+            </ul>
           </CardContent>
         </Card>
       </div>
