@@ -24,7 +24,7 @@ export default function PressPage() {
   return (
     <PageShell
       title="Press"
-      description="Media resources, brand assets, and press coverage."
+      description="Media resources and brand assets for Info Platforms. Coverage updates are posted when available."
     >
       <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
         <Card className="border-border bg-card">
@@ -65,15 +65,26 @@ export default function PressPage() {
           </CardContent>
         </Card>
         <div className="space-y-4">
-          {mockPressCoverage.map((item) => (
-            <Card key={item.id} className="border-border bg-card transition-transform hover:-translate-y-1">
-              <CardContent className="p-6">
-                <div className="text-xs uppercase tracking-wide text-muted-foreground">{item.outlet}</div>
-                <p className="mt-2 text-sm text-foreground">{item.headline}</p>
-                <p className="mt-2 text-xs text-muted-foreground">{item.date}</p>
+          {mockPressCoverage.length ? (
+            mockPressCoverage.map((item) => (
+              <Card key={item.id} className="border-border bg-card transition-transform hover:-translate-y-1">
+                <CardContent className="p-6">
+                  <div className="text-xs uppercase tracking-wide text-muted-foreground">{item.outlet}</div>
+                  <p className="mt-2 text-sm text-foreground">{item.headline}</p>
+                  <p className="mt-2 text-xs text-muted-foreground">{item.date}</p>
+                </CardContent>
+              </Card>
+            ))
+          ) : (
+            <Card className="border-border bg-card">
+              <CardContent className="p-6 text-sm text-muted-foreground">
+                <p className="text-foreground font-medium">No external coverage listed yet</p>
+                <p className="mt-2">
+                  For press inquiries, citations, or interview requests about Info Platforms, use the contact form and mention “Press” in your subject line.
+                </p>
               </CardContent>
             </Card>
-          ))}
+          )}
         </div>
       </div>
 

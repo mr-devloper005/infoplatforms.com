@@ -1,10 +1,10 @@
 export const siteIdentity = {
   code: process.env.NEXT_PUBLIC_SITE_CODE || 'if7m2q9x4v',
   name: process.env.NEXT_PUBLIC_SITE_NAME || 'Info Platforms',
-  tagline: process.env.NEXT_PUBLIC_SITE_TAGLINE || 'Reports, articles, and resource publishing',
+  tagline: process.env.NEXT_PUBLIC_SITE_TAGLINE || 'Articles and PDF resources for decision-ready teams',
   description:
     process.env.NEXT_PUBLIC_SITE_DESCRIPTION ||
-    'A clean publication platform for articles, insights, and downloadable PDF resources.',
+    'Info Platforms publishes editorial articles and a structured PDF library so readers can move from analysis to evidence without switching systems.',
   domain: process.env.NEXT_PUBLIC_SITE_DOMAIN || 'infoplatforms.com',
   url: process.env.NEXT_PUBLIC_SITE_URL || 'https://infoplatforms.com',
   ogImage: process.env.NEXT_PUBLIC_SITE_OG_IMAGE || '/og-default.png',

@@ -60,9 +60,9 @@ export default function ContactPage() {
         ]
       : productKind === 'editorial'
         ? [
-            { icon: FileText, title: 'Editorial submissions', body: 'Pitch essays, columns, and long-form ideas that fit the publication.' },
-            { icon: Mail, title: 'Newsletter partnerships', body: 'Coordinate sponsorships, collaborations, and issue-level campaigns.' },
-            { icon: Sparkles, title: 'Contributor support', body: 'Get help with voice, formatting, and publication workflow questions.' },
+            { icon: FileText, title: 'Articles & analysis', body: 'Pitch editorial pieces, research notes, and long-form coverage that fits Info Platforms.' },
+            { icon: FileText, title: 'PDF resources', body: 'Share report packs, methodology PDFs, and stakeholder documents for the library.' },
+            { icon: Mail, title: 'Partnerships', body: 'Discuss syndication, research collaborations, and co-published briefings.' },
           ]
         : productKind === 'visual'
           ? [
@@ -83,8 +83,10 @@ export default function ContactPage() {
         <section className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.24em] opacity-70">Contact {SITE_CONFIG.name}</p>
-            <h1 className="mt-4 text-5xl font-semibold tracking-[-0.05em]">A support page that matches the product, not a generic contact form.</h1>
-            <p className={`mt-5 max-w-2xl text-sm leading-8 ${tone.muted}`}>Tell us what you are trying to publish, fix, or launch. We will route it through the right lane instead of forcing every request into the same support bucket.</p>
+            <h1 className="mt-4 text-5xl font-semibold tracking-[-0.05em]">Contact the Info Platforms desk</h1>
+            <p className={`mt-5 max-w-2xl text-sm leading-8 ${tone.muted}`}>
+              Tell us whether you are reaching out about editorial, PDF resources, or partnerships. We route requests to the right lane—articles and documents are different workflows, and both matter here.
+            </p>
             <div className="mt-8 space-y-4">
               {lanes.map((lane) => (
                 <div key={lane.title} className={`rounded-[1.6rem] p-5 ${tone.soft}`}>

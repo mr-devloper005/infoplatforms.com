@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowRight, Building2, FileText, Image as ImageIcon, LayoutGrid, Tag, User } from 'lucide-react'
+import { ArrowRight, Building2, FileDown, FileText, Image as ImageIcon, LayoutGrid, Tag, User } from 'lucide-react'
 import { NavbarShell } from '@/components/shared/navbar-shell'
 import { Footer } from '@/components/shared/footer'
 import { TaskListClient } from '@/components/tasks/task-list-client'
@@ -37,6 +37,8 @@ const variantShells = {
   'classified-market': 'bg-[linear-gradient(180deg,#f4f6ef_0%,#ffffff_100%)]',
   'sbm-curation': 'bg-[linear-gradient(180deg,#fff7ee_0%,#ffffff_100%)]',
   'sbm-library': 'bg-[linear-gradient(180deg,#f7f8fc_0%,#ffffff_100%)]',
+  'pdf-repository':
+    'bg-[radial-gradient(circle_at_18%_0%,rgba(248,178,89,0.14),transparent_42%),linear-gradient(180deg,#f3e9dc_0%,#fffdfb_52%,#ffffff_100%)]',
 } as const
 
 export async function TaskListPage({ task, category }: { task: TaskKey; category?: string }) {
@@ -56,7 +58,10 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
     name: post.title,
   }))
   const { recipe } = getFactoryState()
-  const layoutKey = recipe.taskLayouts[task as keyof typeof recipe.taskLayouts] || `${task}-${task === 'listing' ? 'directory' : 'editorial'}`
+  const layoutKey =
+    task === 'pdf'
+      ? 'pdf-repository'
+      : recipe.taskLayouts[task as keyof typeof recipe.taskLayouts] || `${task}-${task === 'listing' ? 'directory' : 'editorial'}`
   const shellClass = variantShells[layoutKey as keyof typeof variantShells] || 'bg-background'
   const Icon = taskIcons[task] || LayoutGrid
 
@@ -69,13 +74,13 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
         input: 'border-white/10 bg-white/6 text-white',
         button: 'bg-white text-slate-950 hover:bg-slate-200',
       }
-    : layoutKey.startsWith('article') || layoutKey.startsWith('sbm')
+    : layoutKey.startsWith('article') || layoutKey.startsWith('sbm') || layoutKey === 'pdf-repository'
       ? {
-          muted: 'text-[#72594a]',
-          panel: 'border border-[#dbc6b6] bg-white/90',
-          soft: 'border border-[#dbc6b6] bg-[#fff8ef]',
-          input: 'border border-[#dbc6b6] bg-white text-[#2f1d16]',
-          button: 'bg-[#2f1d16] text-[#fff4e4] hover:bg-[#452920]',
+          muted: 'text-[color:oklch(0.42_0.04_42)]',
+          panel: 'border border-[color:rgba(199,93,44,0.2)] bg-white/92',
+          soft: 'border border-[color:rgba(199,93,44,0.14)] bg-[rgba(243,233,220,0.45)]',
+          input: 'border border-[color:rgba(199,93,44,0.2)] bg-white text-[var(--ip-ink)]',
+          button: 'bg-[var(--ip-orange)] text-white hover:bg-[#c75d2c]',
         }
       : {
           muted: 'text-slate-600',
@@ -146,16 +151,44 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
           </section>
         ) : null}
 
+        {layoutKey === 'pdf-repository' ? (
+          <section className="mb-12 grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-full border border-[color:rgba(199,93,44,0.2)] bg-white/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--ip-rust)]">
+                <FileDown className="h-4 w-4" />
+                Document desk
+              </div>
+              <h1 className="mt-5 max-w-4xl text-4xl font-semibold tracking-[-0.05em] text-foreground sm:text-5xl">{taskConfig?.description || 'PDF library'}</h1>
+              <p className={`mt-5 max-w-2xl text-sm leading-8 ${ui.muted}`}>
+                A denser, file-forward layout: titles and summaries read like a catalog, tuned for downloads and stakeholder sharing—not the same magazine rhythm as articles.
+              </p>
+            </div>
+            <div className={`grid grid-cols-6 gap-2 rounded-[2rem] p-5 ${ui.soft}`}>
+              <div className="col-span-4 row-span-2 flex min-h-[140px] flex-col justify-end rounded-2xl border border-dashed border-[color:rgba(199,93,44,0.22)] bg-white/80 p-4 text-xs font-medium text-[var(--ip-rust)]">
+                Preview pane
+              </div>
+              <div className="col-span-2 flex min-h-[68px] items-center justify-center rounded-xl border border-[color:rgba(199,93,44,0.12)] bg-[rgba(248,178,89,0.2)] text-[11px] font-semibold uppercase tracking-wider text-[var(--ip-rust)]">
+                PDF
+              </div>
+              <div className="col-span-2 flex min-h-[68px] items-center justify-center rounded-xl border border-[color:rgba(199,93,44,0.12)] bg-white/90 text-[11px] font-medium text-[color:oklch(0.42_0.04_42)]">
+                Metadata
+              </div>
+            </div>
+          </section>
+        ) : null}
+
         {layoutKey === 'article-editorial' || layoutKey === 'article-journal' ? (
           <section className="mb-12 grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
             <div>
               <p className={`text-xs uppercase tracking-[0.3em] ${ui.muted}`}>{taskConfig?.label || task}</p>
               <h1 className="mt-3 max-w-4xl text-5xl font-semibold tracking-[-0.05em] text-foreground">{taskConfig?.description || 'Latest posts'}</h1>
-              <p className={`mt-5 max-w-2xl text-sm leading-8 ${ui.muted}`}>This reading surface uses slower pacing, stronger typographic hierarchy, and more breathing room so long-form content feels intentional rather than squeezed into a generic feed.</p>
+              <p className={`mt-5 max-w-2xl text-sm leading-8 ${ui.muted}`}>
+                Wide measure, deliberate subheads, and calmer pacing so Info Platforms reads like a publication—not a dashboard feed.
+              </p>
             </div>
             <div className={`rounded-[2rem] p-6 ${ui.panel}`}>
-              <p className={`text-xs font-semibold uppercase tracking-[0.24em] ${ui.muted}`}>Reading note</p>
-              <p className={`mt-4 text-sm leading-7 ${ui.muted}`}>Use category filters to jump between topics without collapsing the page into the same repeated card rhythm used by other task types.</p>
+              <p className={`text-xs font-semibold uppercase tracking-[0.24em] ${ui.muted}`}>Browse by topic</p>
+              <p className={`mt-4 text-sm leading-7 ${ui.muted}`}>Filter categories to jump across coverage areas without losing the editorial frame.</p>
               <form className="mt-5 flex items-center gap-3" action={taskConfig?.route || '#'}>
                 <select name="category" defaultValue={normalizedCategory} className={`h-11 flex-1 rounded-xl px-3 text-sm ${ui.input}`}>
                   <option value="all">All categories</option>
