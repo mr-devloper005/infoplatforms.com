@@ -4,8 +4,14 @@ import { useMemo, useState } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Search, Menu, X, User, FileText, Building2, LayoutGrid, Tag, Image as ImageIcon, ChevronRight, Sparkles, MapPin, Plus } from 'lucide-react'
+import { Search, Menu, X, User, FileText, Building2, LayoutGrid, Tag, Image as ImageIcon, ChevronRight, ChevronDown, Sparkles, MapPin, Plus, FileDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { useAuth } from '@/lib/auth-context'
 import { SITE_CONFIG, type TaskKey } from '@/lib/site-config'
 import { cn } from '@/lib/utils'
@@ -26,7 +32,7 @@ const taskIcons: Record<TaskKey, any> = {
   image: ImageIcon,
   profile: User,
   social: LayoutGrid,
-  pdf: FileText,
+  pdf: FileDown,
   org: Building2,
   comment: FileText,
 }
@@ -41,12 +47,12 @@ const variantClasses = {
     mobile: 'border-t border-slate-200/70 bg-white/95',
   },
   'editorial-bar': {
-    shell: 'border-b border-[#d7c4b3] bg-[#fff7ee]/90 text-[#2f1d16] backdrop-blur-xl',
-    logo: 'rounded-full border border-[#dbc6b6] bg-white shadow-sm',
-    active: 'bg-[#2f1d16] text-[#fff4e4]',
-    idle: 'text-[#72594a] hover:bg-[#f2e5d4] hover:text-[#2f1d16]',
-    cta: 'rounded-full bg-[#2f1d16] text-[#fff4e4] hover:bg-[#452920]',
-    mobile: 'border-t border-[#dbc6b6] bg-[#fff7ee]',
+    shell: 'border-b border-[color:rgba(199,93,44,0.18)] bg-[rgba(243,233,220,0.92)] text-[var(--ip-ink)] backdrop-blur-xl',
+    logo: 'rounded-2xl border border-[color:rgba(199,93,44,0.2)] bg-white shadow-sm',
+    active: 'bg-[var(--ip-rust)] text-[#fff4e8]',
+    idle: 'text-[color:oklch(0.42_0.04_42)] hover:bg-[rgba(248,178,89,0.18)] hover:text-[var(--ip-ink)]',
+    cta: 'rounded-full bg-[var(--ip-orange)] text-white hover:bg-[#c75d2c]',
+    mobile: 'border-t border-[color:rgba(199,93,44,0.18)] bg-[var(--ip-cream)]',
   },
   'floating-bar': {
     shell: 'border-b border-transparent bg-transparent text-white',
@@ -98,7 +104,13 @@ export function Navbar() {
   const { recipe } = getFactoryState()
 
   const navigation = useMemo(() => SITE_CONFIG.tasks.filter((task) => task.enabled && task.key !== 'profile'), [])
-  const primaryNavigation = navigation.slice(0, 5)
+  const emphasizedKeys = siteContent.navbar.emphasizedTaskKeys as readonly TaskKey[]
+  const emphasizedNav = useMemo(
+    () => emphasizedKeys.map((key) => navigation.find((task) => task.key === key)).filter(Boolean) as typeof navigation,
+    [navigation, emphasizedKeys],
+  )
+  const otherNav = useMemo(() => navigation.filter((task) => !emphasizedKeys.includes(task.key)), [navigation, emphasizedKeys])
+  const primaryNavigation = [...emphasizedNav, ...otherNav]
   const mobileNavigation = navigation.map((task) => ({
     name: task.label,
     href: task.route,
@@ -124,8 +136,8 @@ export function Navbar() {
               </div>
             </Link>
 
-            <div className="hidden items-center gap-5 xl:flex">
-              {primaryNavigation.slice(0, 4).map((task) => {
+            <div className="hidden items-center gap-3 xl:flex">
+              {emphasizedNav.map((task) => {
                 const isActive = pathname.startsWith(task.route)
                 return (
                   <Link key={task.key} href={task.route} className={cn('text-sm font-semibold transition-colors', isActive ? 'text-foreground' : palette.nav)}>
@@ -133,6 +145,29 @@ export function Navbar() {
                   </Link>
                 )
               })}
+              {otherNav.length ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button
+                      type="button"
+                      className={cn(
+                        'inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-semibold transition-colors',
+                        palette.nav,
+                      )}
+                    >
+                      More
+                      <ChevronDown className="h-4 w-4 opacity-70" />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="min-w-[12rem]">
+                    {otherNav.map((task) => (
+                      <DropdownMenuItem key={task.key} asChild>
+                        <Link href={task.route}>{task.label}</Link>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : null}
             </div>
           </div>
 
@@ -220,17 +255,44 @@ export function Navbar() {
           </Link>
 
           {isEditorial ? (
-            <div className="hidden min-w-0 flex-1 items-center gap-4 xl:flex">
-              <div className="h-px flex-1 bg-[#d8c8bb]" />
-              {primaryNavigation.map((task) => {
+            <div className="hidden min-w-0 flex-1 items-center gap-3 xl:flex">
+              <div className="h-px min-w-[1.5rem] flex-1 bg-[color:rgba(199,93,44,0.22)]" />
+              {emphasizedNav.map((task) => {
                 const isActive = pathname.startsWith(task.route)
                 return (
-                  <Link key={task.key} href={task.route} className={cn('text-sm font-semibold uppercase tracking-[0.18em] transition-colors', isActive ? 'text-[#2f1d16]' : 'text-[#7b6254] hover:text-[#2f1d16]')}>
+                  <Link
+                    key={task.key}
+                    href={task.route}
+                    className={cn(
+                      'text-sm font-semibold uppercase tracking-[0.16em] transition-colors',
+                      isActive ? 'text-[var(--ip-rust)]' : 'text-[color:oklch(0.42_0.04_42)] hover:text-[var(--ip-ink)]',
+                    )}
+                  >
                     {task.label}
                   </Link>
                 )
               })}
-              <div className="h-px flex-1 bg-[#d8c8bb]" />
+              {otherNav.length ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button
+                      type="button"
+                      className="inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-semibold uppercase tracking-[0.14em] text-[color:oklch(0.42_0.04_42)] transition-colors hover:bg-[rgba(248,178,89,0.2)] hover:text-[var(--ip-ink)]"
+                    >
+                      More
+                      <ChevronDown className="h-4 w-4 opacity-70" />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="min-w-[12rem]">
+                    {otherNav.map((task) => (
+                      <DropdownMenuItem key={task.key} asChild>
+                        <Link href={task.route}>{task.label}</Link>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : null}
+              <div className="h-px min-w-[1.5rem] flex-1 bg-[color:rgba(199,93,44,0.22)]" />
             </div>
           ) : isFloating ? (
             <div className="hidden min-w-0 flex-1 items-center gap-2 xl:flex">
@@ -295,7 +357,7 @@ export function Navbar() {
                 <Link href="/login">Sign In</Link>
               </Button>
               <Button size="sm" asChild className={style.cta}>
-                <Link href="/register">{isEditorial ? 'Subscribe' : isUtility ? 'Post Now' : 'Get Started'}</Link>
+                <Link href="/register">{isEditorial ? 'Join' : isUtility ? 'Post Now' : 'Get Started'}</Link>
               </Button>
             </div>
           )}

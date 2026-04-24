@@ -812,22 +812,22 @@ export const mockCommunityGroups: CommunityGroup[] = [
 export const mockPressAssets: PressAsset[] = [
   {
     id: 'press-1',
-    title: 'Brand Logo Pack',
-    description: 'SVG, PNG, and monochrome variations.',
+    title: 'Info Platforms wordmark & icon',
+    description: 'SVG and PNG exports for light backgrounds (cream / white).',
     fileType: 'ZIP',
     previewUrl: 'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=800&h=600&fit=crop'
   },
   {
     id: 'press-2',
-    title: 'Product Screenshots',
-    description: 'High-resolution UI captures for media.',
+    title: 'UI reference captures',
+    description: 'Screens of the article and PDF library surfaces for media use.',
     fileType: 'ZIP',
     previewUrl: 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?w=800&h=600&fit=crop'
   },
   {
     id: 'press-3',
-    title: 'Brand Guidelines',
-    description: 'Usage rules, color palette, and typography.',
+    title: 'Color & type notes',
+    description: 'Rust, amber, and cream usage for Info Platforms-branded layouts.',
     fileType: 'PDF',
     previewUrl: 'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?w=800&h=600&fit=crop'
   }
@@ -860,19 +860,19 @@ export const mockApiEndpoints: ApiEndpoint[] = [
 export const mockFaqs: FAQItem[] = [
   {
     id: 'faq-1',
-    question: 'How do I submit a bookmark?',
-    answer: 'Open Social Bookmarks and choose Submit Bookmark to add your link.'
+    question: 'How do I find articles and PDFs?',
+    answer: 'Use the Articles and PDF Library links in the navigation, or search from the search page to query both.',
   },
   {
     id: 'faq-2',
-    question: 'Can I create private collections?',
-    answer: 'Yes. Set your collection to private when creating it.'
+    question: 'Can I download PDF resources?',
+    answer: 'Yes. Open any PDF post and use the download or view actions provided on the detail page.',
   },
   {
     id: 'faq-3',
-    question: 'How do I upgrade plans?',
-    answer: 'Go to Settings, then Billing to manage your subscription.'
-  }
+    question: 'Who do I contact for editorial or document questions?',
+    answer: 'Use the Contact page and choose the lane that matches your request—editorial, PDF resources, or partnerships.',
+  },
 ]
 
 export const mockBlogPosts: BlogPost[] = [
@@ -905,23 +905,4 @@ export const mockBlogPosts: BlogPost[] = [
   }
 ]
 
-export const mockPressCoverage: PressCoverage[] = [
-  {
-    id: 'press-coverage-1',
-    outlet: 'Product Weekly',
-    headline: 'This platform makes link sharing feel premium.',
-    date: 'Mar 2026'
-  },
-  {
-    id: 'press-coverage-2',
-    outlet: 'Design Journal',
-    headline: 'A fresh take on community curation.',
-    date: 'Feb 2026'
-  },
-  {
-    id: 'press-coverage-3',
-    outlet: 'Tech Today',
-    headline: 'Why teams are switching to this platform.',
-    date: 'Jan 2026'
-  }
-]
+export const mockPressCoverage: PressCoverage[] = []

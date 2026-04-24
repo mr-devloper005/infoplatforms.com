@@ -5,7 +5,7 @@ export const siteTaskDefinitions = [
     route: '/listings',
     description: 'Verified businesses and services.',
     contentType: 'listing',
-    enabled: false,
+    enabled: true,
   },
   {
     key: 'classified',
@@ -13,13 +13,13 @@ export const siteTaskDefinitions = [
     route: '/classifieds',
     description: 'Local offers, jobs, and deals.',
     contentType: 'classified',
-    enabled: false,
+    enabled: true,
   },
   {
     key: 'article',
     label: 'Articles',
     route: '/articles',
-    description: 'Insights, blogs, and long-form content.',
+    description: 'Long-form analysis, briefings, and explainers.',
     contentType: 'article',
     enabled: true,
   },
@@ -29,7 +29,7 @@ export const siteTaskDefinitions = [
     route: '/images',
     description: 'Galleries and media-first posts.',
     contentType: 'image',
-    enabled: false,
+    enabled: true,
   },
   {
     key: 'profile',
@@ -37,7 +37,7 @@ export const siteTaskDefinitions = [
     route: '/profile',
     description: 'Creator and business profiles.',
     contentType: 'profile',
-    enabled: false,
+    enabled: true,
   },
   {
     key: 'sbm',
@@ -45,7 +45,7 @@ export const siteTaskDefinitions = [
     route: '/sbm',
     description: 'Curated bookmarks and resources.',
     contentType: 'social',
-    enabled: false,
+    enabled: true,
   },
   {
     key: 'comment',
@@ -53,13 +53,13 @@ export const siteTaskDefinitions = [
     route: '/blog',
     description: 'Commentary and response posts.',
     contentType: 'article',
-    enabled: false,
+    enabled: true,
   },
   {
     key: 'pdf',
     label: 'PDF Library',
     route: '/pdf',
-    description: 'PDF resources and downloads.',
+    description: 'Reports, decks, and downloadable references.',
     contentType: 'pdf',
     enabled: true,
   },
@@ -69,7 +69,7 @@ export const siteTaskDefinitions = [
     route: '/team',
     description: 'Organization profiles and directories.',
     contentType: 'profile',
-    enabled: false,
+    enabled: true,
   },
 ] as const
 

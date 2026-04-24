@@ -8,9 +8,9 @@ export const SITE_RECIPE: SiteRecipe = {
   footerTemplate: 'columns-footer',
   motionPack: 'editorial-soft',
   primaryTask: 'article',
-  enabledTasks: ['article'],
+  enabledTasks: ['article', 'listing', 'classified', 'image', 'profile', 'sbm'],
   taskTemplates: {
-    article: 'article-editorial'
+    article: 'article-editorial',
   },
   manualOverrides: {
     navbar: false,
