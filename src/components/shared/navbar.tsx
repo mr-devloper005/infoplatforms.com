@@ -127,7 +127,7 @@ export function Navbar() {
         <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
           <div className="flex min-w-0 items-center gap-4">
             <Link href="/" className="flex shrink-0 items-center gap-3">
-              <div className={cn('flex h-12 w-12 items-center justify-center overflow-hidden p-1.5', palette.logo)}>
+              <div className={cn('flex h-12 w-12 items-center justify-center overflow-hidden', palette.logo)}>
                 <img src="/favicon.png?v=20260401" alt={`${SITE_CONFIG.name} logo`} width="48" height="48" className="h-full w-full object-contain" />
               </div>
               <div className="min-w-0 hidden sm:block">
@@ -245,7 +245,7 @@ export function Navbar() {
       <nav className={cn('mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8', isFloating ? 'h-24 pt-4' : 'h-20')}>
         <div className="flex min-w-0 flex-1 items-center gap-4 lg:gap-7">
           <Link href="/" className="flex shrink-0 items-center gap-3 whitespace-nowrap pr-2">
-            <div className={cn('flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden p-1.5', style.logo)}>
+            <div className={cn('flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden', style.logo)}>
               <img src="/favicon.png?v=20260401" alt={`${SITE_CONFIG.name} logo`} width="48" height="48" className="h-full w-full object-contain" />
             </div>
             <div className="min-w-0 hidden sm:block">
