@@ -245,14 +245,14 @@ export function ArticleComments({ slug }: { slug: string }) {
 
   return (
     <section className="mt-12" id="comments">
-      <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
-        <MessageSquare className="h-4 w-4" />
+      <div className="flex items-center gap-2 text-sm font-semibold tracking-[0.18em] uppercase text-[var(--ip-ink)]">
+        <MessageSquare className="h-4 w-4 text-[var(--ip-rust)]" />
         Comments
       </div>
 
-      <form onSubmit={handleSubmit} className="mt-6 rounded-2xl border border-border bg-white p-5 shadow-sm">
+      <form onSubmit={handleSubmit} className="paper-panel mt-6 rounded-[1.6rem] p-5">
         <div className="space-y-2">
-          <label htmlFor="comment-body" className="text-sm font-medium text-foreground">
+          <label htmlFor="comment-body" className="text-sm font-semibold text-[var(--ip-ink)]">
             Add a comment
           </label>
           <Textarea
@@ -260,7 +260,7 @@ export function ArticleComments({ slug }: { slug: string }) {
             value={commentBody}
             onChange={(event) => setCommentBody(event.target.value)}
             placeholder="Write your comment here"
-            className="min-h-28"
+            className="min-h-28 rounded-xl border-[rgba(199,93,44,0.18)] bg-white/80 text-[var(--ip-ink)] focus-visible:ring-[var(--ip-orange)]"
             maxLength={2000}
             disabled={limitReached}
           />
@@ -270,27 +270,31 @@ export function ArticleComments({ slug }: { slug: string }) {
             <div
               className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${
                 limitReached
-                  ? "bg-destructive/10 text-destructive"
+                  ? "bg-[rgba(217,111,50,0.12)] text-[var(--ip-rust)]"
                   : remainingToday <= 3
-                    ? "bg-amber-100 text-amber-700"
-                    : "bg-primary/10 text-primary"
+                    ? "bg-[rgba(248,178,89,0.2)] text-[var(--ip-rust)]"
+                    : "bg-[rgba(217,111,50,0.1)] text-[var(--ip-rust)]"
               }`}
             >
               {limitReached
                 ? `Daily limit reached: ${DAILY_COMMENT_LIMIT}/${DAILY_COMMENT_LIMIT}`
                 : `${remainingToday} of ${DAILY_COMMENT_LIMIT} comments left today`}
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-[color:oklch(0.52_0.04_42)]">
               {limitReached
                 ? `You can publish again after ${resetLabel}.`
                 : `Limit resets after ${resetLabel}.`}
             </p>
           </div>
-          <Button type="submit" disabled={limitReached}>
+          <Button
+            type="submit"
+            disabled={limitReached}
+            className="rounded-xl bg-[var(--ip-orange)] text-white shadow-[0_6px_20px_rgba(217,111,50,0.3)] hover:bg-[#c75d2c]"
+          >
             Publish Comment
           </Button>
         </div>
-        {formError ? <p className="mt-3 text-sm text-destructive">{formError}</p> : null}
+        {formError ? <p className="mt-3 text-sm text-[var(--ip-rust)]">{formError}</p> : null}
       </form>
 
       {mergedComments.length ? (
@@ -301,46 +305,41 @@ export function ArticleComments({ slug }: { slug: string }) {
               <div
                 key={comment.id}
                 id={`comment-${comment.id}`}
-                className={`rounded-2xl border p-4 ${
-                  isHighlighted ? "border-primary/50 bg-primary/5" : "border-border bg-white"
+                className={`rounded-[1.4rem] border p-4 ${
+                  isHighlighted
+                    ? "border-[rgba(199,93,44,0.3)] bg-[rgba(248,178,89,0.1)]"
+                    : "border-[rgba(199,93,44,0.12)] bg-white/85"
                 }`}
               >
                 <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <p className="text-sm font-semibold text-foreground">{comment.authorName}</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <p className="text-xs text-muted-foreground">
-                      {new Date(comment.createdAt).toLocaleDateString()}
-                    </p>
-                    {comment.source === "local" ? (
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteLocalComment(comment.id)}
-                        className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border text-muted-foreground transition hover:border-destructive/30 hover:bg-destructive/5 hover:text-destructive"
-                        aria-label="Delete local comment"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                    ) : null}
-                  </div>
+                  <p className="text-sm font-semibold text-[var(--ip-ink)]">{comment.authorName}</p>
+                  {comment.source === "local" ? (
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteLocalComment(comment.id)}
+                      className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[rgba(199,93,44,0.14)] text-[color:oklch(0.52_0.04_42)] transition hover:border-[rgba(199,93,44,0.3)] hover:bg-[rgba(217,111,50,0.08)] hover:text-[var(--ip-rust)]"
+                      aria-label="Delete local comment"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  ) : null}
                 </div>
                 <RichContent
                   html={formatRichHtml(comment.body, "Comment added.")}
-                  className="mt-2 text-sm text-muted-foreground prose-sm prose-h2:text-xl prose-h3:text-lg"
+                  className="mt-2 text-sm leading-7 text-[color:oklch(0.42_0.04_42)] prose-sm prose-h2:text-xl prose-h3:text-lg"
                 />
               </div>
             );
           })}
         </div>
       ) : (
-        <div className="mt-6 rounded-2xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
+        <div className="paper-panel mt-6 rounded-[1.6rem] border-dashed p-6 text-center text-sm text-[color:oklch(0.52_0.04_42)]">
           No comments yet.
         </div>
       )}
 
       {totalPages > 1 ? (
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-4 text-sm text-muted-foreground">
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-4 text-sm text-[color:oklch(0.52_0.04_42)]">
           <span>
             Page {safePage} of {totalPages}
           </span>
@@ -349,7 +348,7 @@ export function ArticleComments({ slug }: { slug: string }) {
               type="button"
               onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
               disabled={safePage === 1}
-              className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold text-foreground disabled:cursor-not-allowed disabled:opacity-40"
+              className="rounded-full border border-[rgba(199,93,44,0.16)] bg-white/70 px-3 py-1.5 text-xs font-semibold text-[var(--ip-ink)] transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-40"
             >
               Previous
             </button>
@@ -357,7 +356,7 @@ export function ArticleComments({ slug }: { slug: string }) {
               type="button"
               onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
               disabled={safePage === totalPages}
-              className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold text-foreground disabled:cursor-not-allowed disabled:opacity-40"
+              className="rounded-full border border-[rgba(199,93,44,0.16)] bg-white/70 px-3 py-1.5 text-xs font-semibold text-[var(--ip-ink)] transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-40"
             >
               Next
             </button>

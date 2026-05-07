@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { FileDown, FileText, ArrowLeft, Tag, ExternalLink, Download } from "lucide-react";
 
 import { Footer } from "@/components/shared/footer";
 import { NavbarShell } from "@/components/shared/navbar-shell";
-import { TaskPostCard } from "@/components/shared/task-post-card";
 import { SchemaJsonLd } from "@/components/seo/schema-jsonld";
 import { buildPostMetadata, buildTaskMetadata } from "@/lib/seo";
-import { buildPostUrl, fetchTaskPostBySlug, fetchTaskPosts } from "@/lib/task-data";
-import { SITE_CONFIG } from "@/lib/site-config";
+import { fetchTaskPostBySlug, fetchTaskPosts } from "@/lib/task-data";
+import { SITE_CONFIG, getTaskConfig } from "@/lib/site-config";
 
 export const revalidate = 3;
 
@@ -57,18 +57,14 @@ export default async function PdfDetailPage({ params }: { params: Promise<{ slug
   const baseUrl = SITE_CONFIG.baseUrl.replace(/\/$/, "");
   const category =
     typeof contentAny.category === "string" ? contentAny.category : "";
-  const related = (await fetchTaskPosts("pdf", 6))
-    .filter((item) => item.slug !== post.slug)
-    .filter((item) => {
-      if (!category) return true;
-      const itemContent = item.content && typeof item.content === "object" ? item.content : {};
-      const itemCategory =
-        typeof (itemContent as Record<string, unknown>).category === "string"
-          ? (itemContent as Record<string, unknown>).category
-          : "";
-      return itemCategory === category;
-    })
-    .slice(0, 3);
+  const pageCount =
+    typeof contentAny.pageCount === "number" ? contentAny.pageCount : null;
+  const fileSize =
+    typeof contentAny.fileSize === "string" ? contentAny.fileSize : null;
+
+  await fetchTaskPosts("pdf", 1);
+
+  const taskConfig = getTaskConfig("pdf");
   const breadcrumbData = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -82,7 +78,7 @@ export default async function PdfDetailPage({ params }: { params: Promise<{ slug
       {
         "@type": "ListItem",
         position: 2,
-        name: "PDF Library",
+        name: taskConfig?.label || "PDF Library",
         item: `${baseUrl}/pdf`,
       },
       {
@@ -95,76 +91,136 @@ export default async function PdfDetailPage({ params }: { params: Promise<{ slug
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div
+      className="min-h-screen"
+      style={{
+        background:
+          "radial-gradient(circle at 18% 0%, rgba(248,178,89,0.14), transparent 42%), linear-gradient(180deg, #f3e9dc 0%, #fffdfb 52%, #ffffff 100%)",
+      }}
+    >
       <NavbarShell />
-      <main className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
+      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <SchemaJsonLd data={breadcrumbData} />
-        <Link
-          href="/pdf"
-          className="text-sm text-muted-foreground hover:text-foreground"
-        >
-          ← Back to PDF Library
-        </Link>
-        <h1 className="text-2xl font-semibold text-foreground">{post.title}</h1>
-        <div className="overflow-hidden rounded-2xl bg-background">
-          <iframe
-            src={viewerUrl}
-            title={post.title}
-            className="h-[85vh] w-full"
-          />
-        </div>
-        <div className="flex items-center gap-3">
-          <a
-            href={fileUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground hover:bg-muted"
+
+        {/* Breadcrumb */}
+        <nav className="mb-8">
+          <Link
+            href="/pdf"
+            className="inline-flex items-center gap-2 rounded-full border border-[rgba(199,93,44,0.2)] bg-white/70 px-4 py-2 text-sm font-medium text-[var(--ip-ink)] backdrop-blur-sm transition hover:bg-white"
           >
-            Download PDF
-          </a>
+            <ArrowLeft className="h-4 w-4" />
+            Back to {taskConfig?.label || "PDF Library"}
+          </Link>
+        </nav>
+
+        {/* Title header */}
+        <div className="mb-8">
+          {category && (
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[rgba(199,93,44,0.18)] bg-[rgba(248,178,89,0.18)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--ip-rust)]">
+              <Tag className="h-3.5 w-3.5" />
+              {category}
+            </span>
+          )}
+          <h1
+            className="mt-5 max-w-4xl text-3xl font-semibold tracking-[-0.04em] text-[var(--ip-ink)] sm:text-4xl lg:text-[2.6rem]"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
+            {post.title}
+          </h1>
         </div>
-        {related.length ? (
-          <section className="pt-4">
-            <div className="mb-3 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-foreground">More like this</h2>
-              <Link
-                href="/pdf"
-                className="text-sm text-muted-foreground hover:text-foreground"
-              >
-                View all
-              </Link>
+
+        {/* Main grid */}
+        <div className="grid gap-8 lg:grid-cols-[1fr_320px] lg:items-start">
+          {/* PDF viewer */}
+          <div className="paper-panel overflow-hidden rounded-[1.6rem]">
+            <div className="flex items-center gap-3 border-b border-[rgba(199,93,44,0.12)] bg-[rgba(248,178,89,0.08)] px-5 py-3">
+              <FileText className="h-4 w-4 text-[var(--ip-rust)]" />
+              <span className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--ip-rust)]">
+                Preview
+              </span>
+              <span className="ml-auto text-[11px] text-[color:oklch(0.52_0.04_42)]">
+                {post.title}
+              </span>
             </div>
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {related.map((item) => (
-                <TaskPostCard
-                  key={item.id}
-                  post={item}
-                  href={buildPostUrl("pdf", item.slug)}
-                />
-              ))}
+            <iframe
+              src={viewerUrl}
+              title={post.title}
+              className="h-[78vh] w-full bg-white"
+            />
+          </div>
+
+          {/* Sidebar */}
+          <aside className="space-y-5">
+            {/* Actions */}
+            <div className="paper-panel rounded-[1.6rem] p-5">
+              <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--ip-ink)]">
+                Actions
+              </h2>
+              <div className="mt-4 flex flex-col gap-3">
+                <a
+                  href={fileUrl}
+                  download
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--ip-orange)] px-5 py-3 text-sm font-semibold text-white shadow-[0_8px_28px_rgba(217,111,50,0.35)] transition hover:bg-[#c75d2c]"
+                >
+                  <Download className="h-4 w-4" />
+                  Download PDF
+                </a>
+                <a
+                  href={fileUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-[rgba(199,93,44,0.22)] bg-white px-5 py-3 text-sm font-semibold text-[var(--ip-ink)] transition hover:bg-[rgba(248,178,89,0.12)]"
+                >
+                  <ExternalLink className="h-4 w-4" />
+                  Open in new tab
+                </a>
+              </div>
             </div>
-            <nav className="mt-6 rounded-2xl border border-border bg-card/60 p-4">
-              <p className="text-sm font-semibold text-foreground">Related links</p>
-              <ul className="mt-2 space-y-2 text-sm">
-                {related.map((item) => (
-                  <li key={`related-${item.id}`}>
-                    <Link
-                      href={buildPostUrl("pdf", item.slug)}
-                      className="text-primary underline-offset-4 hover:underline"
-                    >
-                      {item.title}
-                    </Link>
-                  </li>
-                ))}
-                <li>
-                  <Link href="/pdf" className="text-primary underline-offset-4 hover:underline">
-                    Browse all PDFs
-                  </Link>
-                </li>
-              </ul>
-            </nav>
-          </section>
-        ) : null}
+
+            {/* Document info */}
+            <div className="paper-panel rounded-[1.6rem] p-5">
+              <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--ip-ink)]">
+                Document info
+              </h2>
+              <dl className="mt-4 space-y-3">
+                {category && (
+                  <div className="flex items-center justify-between">
+                    <dt className="flex items-center gap-2 text-sm text-[color:oklch(0.52_0.04_42)]">
+                      <Tag className="h-3.5 w-3.5" />
+                      Category
+                    </dt>
+                    <dd className="text-sm font-medium text-[var(--ip-ink)]">{category}</dd>
+                  </div>
+                )}
+                {pageCount && (
+                  <div className="flex items-center justify-between">
+                    <dt className="flex items-center gap-2 text-sm text-[color:oklch(0.52_0.04_42)]">
+                      <FileDown className="h-3.5 w-3.5" />
+                      Pages
+                    </dt>
+                    <dd className="text-sm font-medium text-[var(--ip-ink)]">{pageCount}</dd>
+                  </div>
+                )}
+                {fileSize && (
+                  <div className="flex items-center justify-between">
+                    <dt className="flex items-center gap-2 text-sm text-[color:oklch(0.52_0.04_42)]">
+                      <FileText className="h-3.5 w-3.5" />
+                      Size
+                    </dt>
+                    <dd className="text-sm font-medium text-[var(--ip-ink)]">{fileSize}</dd>
+                  </div>
+                )}
+                {!category && !pageCount && !fileSize && (
+                  <p className="text-sm text-[color:oklch(0.52_0.04_42)]">
+                    No additional metadata available.
+                  </p>
+                )}
+              </dl>
+            </div>
+
+          </aside>
+        </div>
+
       </main>
       <Footer />
     </div>
