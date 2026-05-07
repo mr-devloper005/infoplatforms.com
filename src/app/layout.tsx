@@ -1,7 +1,15 @@
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
+import { Germania_One } from 'next/font/google'
 
 import './globals.css'
+
+const germaniaOne = Germania_One({
+  weight: '400',
+  subsets: ['latin'],
+  variable: '--font-germania-one',
+  display: 'swap',
+})
 
 import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/toaster'
@@ -21,7 +29,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body
         data-site-shell={recipe.homeLayout}
         data-motion-pack={recipe.motionPack}
-        className={`${brandPack.bodyClassName} ${brandPack.fontClassName} ${brandPack.paletteClassName}`}
+        className={`${germaniaOne.className} ${germaniaOne.variable} ${brandPack.bodyClassName} ${brandPack.fontClassName} ${brandPack.paletteClassName}`}
       >
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           <AuthProvider>

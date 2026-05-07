@@ -79,9 +79,9 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-manrope), system-ui, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
-  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-sans: var(--font-germania-one), system-ui, sans-serif;
+  --font-mono: var(--font-germania-one), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-display: var(--font-germania-one), ui-serif, Georgia, serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);

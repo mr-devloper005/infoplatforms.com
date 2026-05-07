@@ -271,9 +271,7 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
                 <h1 className="text-4xl font-semibold leading-tight text-foreground">
                   {post.title}
                 </h1>
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
-                  <span>By {articleAuthor}</span>
-                  {articleDate ? <span>{articleDate}</span> : null}
+                <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
                   <Badge variant="secondary" className="inline-flex items-center gap-1">
                     <Tag className="h-3.5 w-3.5" />
                     {category}
@@ -287,9 +285,6 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
                       </Badge>
                     ))}
                   </div>
-                ) : null}
-                {articleSummary ? (
-                  <p className="text-base leading-7 text-muted-foreground">{articleSummary}</p>
                 ) : null}
                 {images[0] ? (
                   <div className="relative aspect-[16/9] w-full overflow-hidden rounded-3xl border border-border bg-muted">
