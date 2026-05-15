@@ -163,16 +163,18 @@ export async function TaskListPage({ task, category }: { task: TaskKey; category
                 A denser, file-forward layout: titles and summaries read like a catalog, tuned for downloads and stakeholder sharing—not the same magazine rhythm as articles.
               </p>
             </div>
-            <div className={`grid grid-cols-6 gap-2 rounded-[2rem] p-5 ${ui.soft}`}>
-              <div className="col-span-4 row-span-2 flex min-h-[140px] flex-col justify-end rounded-2xl border border-dashed border-[color:rgba(199,93,44,0.22)] bg-white/80 p-4 text-xs font-medium text-[var(--ip-rust)]">
-                Preview pane
-              </div>
-              <div className="col-span-2 flex min-h-[68px] items-center justify-center rounded-xl border border-[color:rgba(199,93,44,0.12)] bg-[rgba(248,178,89,0.2)] text-[11px] font-semibold uppercase tracking-wider text-[var(--ip-rust)]">
-                PDF
-              </div>
-              <div className="col-span-2 flex min-h-[68px] items-center justify-center rounded-xl border border-[color:rgba(199,93,44,0.12)] bg-white/90 text-[11px] font-medium text-[color:oklch(0.42_0.04_42)]">
-                Metadata
-              </div>
+            <div className={`rounded-[2rem] p-6 ${ui.panel}`}>
+              <p className={`text-xs font-semibold uppercase tracking-[0.24em] ${ui.muted}`}>Filter PDFs</p>
+              <p className={`mt-4 text-sm leading-7 ${ui.muted}`}>Browse document categories to quickly narrow the library.</p>
+              <form className="mt-5 flex items-center gap-3" action={taskConfig?.route || '#'} method="get">
+                <select name="category" defaultValue={normalizedCategory} className={`h-11 flex-1 rounded-xl px-3 text-sm ${ui.input}`}>
+                  <option value="all">All categories</option>
+                  {CATEGORY_OPTIONS.map((item) => (
+                    <option key={item.slug} value={item.slug}>{item.name}</option>
+                  ))}
+                </select>
+                <button type="submit" className={`h-11 rounded-xl px-4 text-sm font-medium ${ui.button}`}>Apply</button>
+              </form>
             </div>
           </section>
         ) : null}

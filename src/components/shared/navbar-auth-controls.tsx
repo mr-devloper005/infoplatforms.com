@@ -34,13 +34,13 @@ export function NavbarAuthControls() {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button size="sm" className="hidden h-10 gap-1 rounded-full bg-[#AE2448] px-4 text-white shadow-[0_16px_30px_rgba(174,36,72,0.24)] hover:bg-[#8e1b3b] sm:flex">
+          <Button id="navbar-auth-create-trigger" size="sm" className="hidden h-10 gap-1 rounded-full bg-[#AE2448] px-4 text-white shadow-[0_16px_30px_rgba(174,36,72,0.24)] hover:bg-[#8e1b3b] sm:flex">
             <Plus className="h-4 w-4" />
             Create
             <ChevronDown className="h-3 w-3" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-56 border-[rgba(110,26,55,0.12)] bg-[rgba(255,250,244,0.98)]">
+        <DropdownMenuContent id="navbar-auth-create-content" align="end" className="w-56 border-[rgba(110,26,55,0.12)] bg-[rgba(255,250,244,0.98)]">
           {SITE_CONFIG.tasks.filter((task) => task.enabled).map((task) => {
             const Icon = taskIcons[task.key] || LayoutGrid
             return (
@@ -57,14 +57,14 @@ export function NavbarAuthControls() {
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="rounded-full text-[#5f4750] hover:bg-[rgba(110,26,55,0.06)] hover:text-[#8f1f3f]">
+          <Button id="navbar-auth-avatar-trigger" variant="ghost" size="icon" className="rounded-full text-[#5f4750] hover:bg-[rgba(110,26,55,0.06)] hover:text-[#8f1f3f]">
             <Avatar className="h-9 w-9 border border-[rgba(110,26,55,0.12)]">
               <AvatarImage src={user?.avatar} alt={user?.name} />
               <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-56 border-[rgba(110,26,55,0.12)] bg-[rgba(255,250,244,0.98)]">
+        <DropdownMenuContent id="navbar-auth-avatar-content" align="end" className="w-56 border-[rgba(110,26,55,0.12)] bg-[rgba(255,250,244,0.98)]">
           <div className="flex items-center gap-3 p-3">
             <Avatar className="h-10 w-10 border border-[rgba(110,26,55,0.12)]">
               <AvatarImage src={user?.avatar} alt={user?.name} />
