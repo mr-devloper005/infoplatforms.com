@@ -103,7 +103,10 @@ export function Navbar() {
   const { isAuthenticated } = useAuth()
   const { recipe } = getFactoryState()
 
-  const navigation = useMemo(() => SITE_CONFIG.tasks.filter((task) => task.enabled && task.key !== 'profile'), [])
+  const navigation = useMemo(
+    () => SITE_CONFIG.tasks.filter((task) => task.enabled && task.key !== 'profile' && task.key !== 'article' && task.key !== 'pdf'),
+    [],
+  )
   const emphasizedKeys = siteContent.navbar.emphasizedTaskKeys as readonly TaskKey[]
   const emphasizedNav = useMemo(
     () => emphasizedKeys.map((key) => navigation.find((task) => task.key === key)).filter(Boolean) as typeof navigation,
@@ -149,6 +152,7 @@ export function Navbar() {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <button
+                      id="navbar-directory-more-trigger"
                       type="button"
                       className={cn(
                         'inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-semibold transition-colors',
@@ -159,7 +163,7 @@ export function Navbar() {
                       <ChevronDown className="h-4 w-4 opacity-70" />
                     </button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="min-w-[12rem]">
+                  <DropdownMenuContent id="navbar-directory-more-content" align="end" className="min-w-[12rem]">
                     {otherNav.map((task) => (
                       <DropdownMenuItem key={task.key} asChild>
                         <Link href={task.route}>{task.label}</Link>
@@ -276,6 +280,7 @@ export function Navbar() {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <button
+                      id="navbar-editorial-more-trigger"
                       type="button"
                       className="inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-semibold uppercase tracking-[0.14em] text-[color:oklch(0.42_0.04_42)] transition-colors hover:bg-[rgba(248,178,89,0.2)] hover:text-[var(--ip-ink)]"
                     >
@@ -283,7 +288,7 @@ export function Navbar() {
                       <ChevronDown className="h-4 w-4 opacity-70" />
                     </button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="min-w-[12rem]">
+                  <DropdownMenuContent id="navbar-editorial-more-content" align="end" className="min-w-[12rem]">
                     {otherNav.map((task) => (
                       <DropdownMenuItem key={task.key} asChild>
                         <Link href={task.route}>{task.label}</Link>

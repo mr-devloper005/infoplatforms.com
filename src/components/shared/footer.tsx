@@ -21,22 +21,17 @@ const taskIcons: Record<TaskKey, any> = {
 const footerLinks = {
   company: [
     { name: 'About', href: '/about' },
-    { name: 'Team', href: '/team' },
-    { name: 'Careers', href: '/careers' },
-    { name: 'Blog', href: '/blog' },
-    { name: 'Press', href: '/press' },
+    { name: 'Contact', href: '/contact' },
+
   ],
   resources: [
     { name: 'Help Center', href: '/help' },
-    { name: 'Community', href: '/community' },
-    { name: 'Developers', href: '/developers' },
-    { name: 'Status', href: '/status' },
+    { name: 'Search', href: '/search' },
+
   ],
   legal: [
     { name: 'Privacy', href: '/privacy' },
     { name: 'Terms', href: '/terms' },
-    { name: 'Cookies', href: '/cookies' },
-    { name: 'Licenses', href: '/licenses' },
   ],
 }
 
@@ -170,16 +165,7 @@ export function Footer() {
                 ))}
               </ul>
             </div>
-            <div>
-              <h4 className="text-xs font-semibold uppercase tracking-[0.24em] text-[color:oklch(0.45_0.04_42)]">More on site</h4>
-              <ul className="mt-4 space-y-3 text-sm text-[color:oklch(0.42_0.04_42)]">
-                {morePlatformLinks.map((item: any) => (
-                  <li key={item.name}>
-                    <Link href={item.href} className="hover:text-[var(--ip-ink)]">{item.name}</Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            
             <div>
               <h4 className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--ip-rust)]">Company</h4>
               <ul className="mt-4 space-y-3 text-sm">
@@ -218,14 +204,7 @@ export function Footer() {
               ))}
             </ul>
           </div>
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:oklch(0.45_0.04_42)]">More on site</h3>
-            <ul className="mt-5 space-y-3 text-sm text-[color:oklch(0.42_0.04_42)]">
-              {morePlatformLinks.map((item: any) => (
-                <li key={item.name}><Link href={item.href} className="hover:text-[var(--ip-ink)]">{item.name}</Link></li>
-              ))}
-            </ul>
-          </div>
+        
           {(['company', 'resources', 'legal'] as const).map((section) => (
             <div key={section}>
               <h3 className="text-sm font-semibold uppercase tracking-[0.22em] text-[color:oklch(0.45_0.04_42)]">{section}</h3>

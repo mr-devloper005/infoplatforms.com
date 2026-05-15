@@ -2,7 +2,7 @@ import type { TaskKey } from '@/lib/site-config'
 
 export const siteContent = {
   navbar: {
-    tagline: 'Articles & PDF intelligence',
+    tagline: '',
     /** Shown prominently in the main nav; other enabled tasks remain in “More”. */
     emphasizedTaskKeys: ['article', 'pdf'] as const satisfies readonly TaskKey[],
   },

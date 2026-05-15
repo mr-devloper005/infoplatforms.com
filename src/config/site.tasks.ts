@@ -1,3 +1,5 @@
+import { tr } from "date-fns/locale"
+
 export const siteTaskDefinitions = [
   {
     key: 'listing',
@@ -5,7 +7,7 @@ export const siteTaskDefinitions = [
     route: '/listing',
     description: 'Verified businesses and services.',
     contentType: 'listing',
-    enabled: true,
+    enabled: false,
   },
   {
     key: 'classified',
@@ -13,7 +15,7 @@ export const siteTaskDefinitions = [
     route: '/classified',
     description: 'Local offers, jobs, and deals.',
     contentType: 'classified',
-    enabled: true,
+    enabled: false,
   },
   {
   key: 'article',
@@ -29,7 +31,7 @@ export const siteTaskDefinitions = [
     route: '/image',
     description: 'Galleries and media-first posts.',
     contentType: 'image',
-    enabled: true,
+    enabled: false,
   },
   {
     key: 'profile',
@@ -37,7 +39,7 @@ export const siteTaskDefinitions = [
     route: '/profile',
     description: 'Creator and business profiles.',
     contentType: 'profile',
-    enabled: true,
+    enabled: false,
   },
   {
     key: 'sbm',
@@ -45,7 +47,7 @@ export const siteTaskDefinitions = [
     route: '/sbm',
     description: 'Curated bookmarks and resources.',
     contentType: 'sbm',
-    enabled: true,
+    enabled: false,
   },
   {
     key: 'comment',
@@ -53,7 +55,7 @@ export const siteTaskDefinitions = [
     route: '/blog',
     description: 'Commentary and response posts.',
     contentType: 'comment',
-    enabled: true,
+    enabled: false,
   },
   {
   key: 'pdf',
@@ -69,7 +71,7 @@ export const siteTaskDefinitions = [
     route: '/team',
     description: 'Organization profiles and directories.',
     contentType: 'org',
-    enabled: true,
+    enabled: false,
   },
 ] as const
 
